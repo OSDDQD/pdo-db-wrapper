@@ -8,7 +8,7 @@
  *
  */
 
-namespace Slowpoked;
+namespace Slowpoked\Db;
 
 class DB
 {
