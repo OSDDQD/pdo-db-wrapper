@@ -1,17 +1,20 @@
 {
-    "name": "slowpoked/pdo-db-wrapper",
-    "description": "A database class for MySQL with PDO",
-    "type": "library",
-    "keywords": [ "mysql", "pdo", "php", "beer", "free" ],
-    "homepage": "https://github.com/OSDDQD/pdo-db-wrapper",
-    "license": "MIT",
-    "authors": [
-        { "name": "Slowpoked", "email": "slowpokedme@gmail.com" }
-    ],
-    "require": {
-         "php": ">=5.3.0"
-    }
-    "autoload": {
-	"psr-0": {"Slowpoked": "src/"}
-    }
+	"name": "slowpoked/pdo-db-wrapper",
+	"description": "A database class for MySQL with PDO",
+	"keywords": [ "mysql", "pdo", "php", "beer", "free" ],
+	"homepage": "https://github.com/OSDDQD/pdo-db-wrapper",
+	"type": "library",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Slowpoked",
+			"email": "slowpokedme@gmail.com",
+		}
+	],
+	"require": {
+		"php": ">=5.3.0"
+	},
+	"autoload": {
+		"psr-0": {"Slowpoked": "src/"}
+	}
 }
