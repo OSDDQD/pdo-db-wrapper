@@ -1,4 +1,4 @@
-<?php namespace Slowpoked\Db;
+<?php 
 /**
  *  DB - A simple database class 
  *
@@ -7,6 +7,8 @@
  * @version      0.2ab
  *
  */
+
+namespace Slowpoked\Db;
 
 class DB
 {
