@@ -1,4 +1,4 @@
-<?php namespace Slowpoked;
+<?php namespace Slowpoked\Db;
 /**
  *  DB - A simple database class 
  *
