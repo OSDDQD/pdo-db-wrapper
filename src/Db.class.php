@@ -1,4 +1,4 @@
-<?php
+<?php namespace Slowpoked;
 /**
  *  DB - A simple database class 
  *
@@ -7,7 +7,7 @@
  * @version      0.2ab
  *
  */
-require("Log.class.php");
+
 class DB
 {
     # @object, The PDO object
@@ -22,9 +22,6 @@ class DB
     # @bool ,  Connected to the database
     private $bConnected = false;
     
-    # @object, Object for logging exceptions	
-    private $log;
-    
     # @array, The parameters of the SQL query
     private $parameters;
     
@@ -35,9 +32,9 @@ class DB
      *	2. Connect to database.
      *	3. Creates the parameter array.
      */
-    public function __construct()
+    public function __construct(array $settings = array())
     {
-        $this->log = new Log();
+        $this->settings = $settings;
         $this->Connect();
         $this->parameters = array();
     }
@@ -52,24 +49,23 @@ class DB
      */
     private function Connect()
     {
-        $this->settings = parse_ini_file("settings.ini.php");
-        $dsn            = 'mysql:dbname=' . $this->settings["dbname"] . ';host=' . $this->settings["host"] . '';
+        $dsn = 'mysql:dbname=' . $this->settings["dbname"] . ';host=' . $this->settings["host"] . '';
         try {
             # Read settings from INI file, set UTF8
-            $this->pdo = new PDO($dsn, $this->settings["user"], $this->settings["password"], array(
-                PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
+            $this->pdo = new \PDO($dsn, $this->settings["user"], $this->settings["password"], array(
+                \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
             ));
             
             # We can now log any exceptions on Fatal error. 
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             
             # Disable emulation of prepared statements, use REAL prepared statements instead.
-            $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            $this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
             
             # Connection succeeded, set the boolean to true.
             $this->bConnected = true;
         }
-        catch (PDOException $e) {
+        catch (\PDOException $e) {
             # Write into log
             echo $this->ExceptionLog($e->getMessage());
             die();
@@ -113,16 +109,16 @@ class DB
             if (!empty($this->parameters)) {
                 foreach ($this->parameters as $param => $value) {
                     
-                    $type = PDO::PARAM_STR;
+                    $type = \PDO::PARAM_STR;
                     switch ($value[1]) {
                         case is_int($value[1]):
-                            $type = PDO::PARAM_INT;
+                            $type = \PDO::PARAM_INT;
                             break;
                         case is_bool($value[1]):
-                            $type = PDO::PARAM_BOOL;
+                            $type = \PDO::PARAM_BOOL;
                             break;
                         case is_null($value[1]):
-                            $type = PDO::PARAM_NULL;
+                            $type = \PDO::PARAM_NULL;
                             break;
                     }
                     // Add type when binding the values to the column
@@ -133,7 +129,7 @@ class DB
             # Execute SQL 
             $this->sQuery->execute();
         }
-        catch (PDOException $e) {
+        catch (\PDOException $e) {
             # Write into log and display Exception
             echo $this->ExceptionLog($e->getMessage(), $query);
             die();
@@ -178,7 +174,7 @@ class DB
      *	@param  int    $fetchmode
      *	@return mixed
      */
-    public function query($query, $params = null, $fetchmode = PDO::FETCH_ASSOC)
+    public function query($query, $params = null, $fetchmode = \PDO::FETCH_ASSOC)
     {
         $query = trim(str_replace("\r", " ", $query));
         
@@ -244,7 +240,7 @@ class DB
     public function column($query, $params = null)
     {
         $this->Init($query, $params);
-        $Columns = $this->sQuery->fetchAll(PDO::FETCH_NUM);
+        $Columns = $this->sQuery->fetchAll(\PDO::FETCH_NUM);
         
         $column = null;
         
@@ -263,7 +259,7 @@ class DB
      *   	@param  int    $fetchmode
      *	@return array
      */
-    public function row($query, $params = null, $fetchmode = PDO::FETCH_ASSOC)
+    public function row($query, $params = null, $fetchmode = \PDO::FETCH_ASSOC)
     {
         $this->Init($query, $params);
         $result = $this->sQuery->fetch($fetchmode);
@@ -301,8 +297,6 @@ class DB
             # Add the Raw SQL to the Log
             $message .= "\r\nRaw SQL : " . $sql;
         }
-        # Write into log
-        $this->log->write($message);
         
         return $exception;
     }

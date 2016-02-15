@@ -3,44 +3,31 @@ PDO Database Class
 
 A database class for PHP-MySQL which uses the PDO extension.
 
-### To-do
-#### 1. PSR-0 / PSR-1 coding standards
-#### 2. Use namespaces
-#### 3. Dependency Injection / Testability
-
-If you have any questions go to : http://indieteq.com/index/readmore/how-to-prevent-sql-injection-in-php
-
 ## To use the class
-#### 1. Edit the database settings in the settings.ini.php
-### Note if PDO is loading slow change localhost to -> 127.0.0.1 !
-```
-[SQL]
-host = 127.0.0.1
-user = root
-password = 
-dbname = yourdatabase
+#### 1. Install with composer
+```bash
+php composer.phar require slowpoked/pdo-db-wrapper
 ```
 #### 2. Require the class in your project
 ```php
 <?php
-require("Db.class.php");
+use \Slowpoked\Db;
 ```
 #### 3. Create the instance 
 ```php
 <?php
 // The instance
-$db = new Db();
+$db = new Db([
+	'dbname' => 'dbname',
+	'host' => '127.0.0.1',
+	'user' => 'user',
+	'password' => 'password'
+]);
 ```
-#### 4.  Logs - Modify the read/write rights of the root folder
 
-Everytime an exception is thrown by the database class a log file gets created or modified.
-These logs are stored in the logs directory. Which means the database class needs write access for the logs folder.
-If the files are on a webserver you'll have to modify the rights of the root folder otherwise you'll get a "Permission denied" error.
-
-The log file is a simple plain text file with the current date('year-month-day') as filename.
 
 ## Examples
-Below some examples of the basic functions of the database class. I've included a SQL dump so you can easily test the database
+Below some examples of the basic functions of the database class. 
 class functions. 
 #### The persons table 
 | id | firstname | lastname | sex | age
@@ -168,111 +155,4 @@ Here an example :
 ```
 More info about the PDO fetchstyle : http://php.net/manual/en/pdostatement.fetch.php
 
-
-EasyCRUD
-============================
-The easyCRUD is a class which you can use to easily execute basic SQL operations like(insert, update, select, delete) on your database. 
-It uses the database class I've created to execute the SQL queries.
-
-Actually it's just a little ORM class.
-
-## How to use easyCRUD
-#### 1. First, create a new class. Then require the easyCRUD class.
-#### 2. Extend your class to the base class Crud and add the following fields to the class.
-#### Example class :
-```php
-<?php
-require_once("easyCRUD.class.php");
- 
-class YourClass  Extends Crud {
- 
-  # The table you want to perform the database actions on
-  protected $table = 'persons';
-
-  # Primary Key of the table
-  protected $pk  = 'id';
-  
-}
-```
-
-## EasyCRUD in action.
-
-#### Creating a new person
-```php
-<?php
-// First we"ll have create the instance of the class
-$person = new person();
- 
-// Create new person
-$person->Firstname  = "Kona";
-$person->Age        = "20";
-$person->Sex        = "F";
-$created            = $person->Create();
- 
-//  Or give the bindings to the constructor
-$person  = new person(array("Firstname"=>"Kona","age"=>"20","sex"=>"F"));
-$created = $person->Create();
- 
-// SQL Equivalent
-"INSERT INTO persons (Firstname,Age,Sex) VALUES ('Kona','20','F')"
-```
-#### Deleting a person
-```php
-<?php
-// Delete person
-$person->Id  = "17";
-$deleted     = $person->Delete();
- 
-// Shorthand method, give id as parameter
-$deleted     = $person->Delete(17);
- 
-// SQL Equivalent
-"DELETE FROM persons WHERE Id = 17 LIMIT 1"
-```
-#### Saving person's data
-```php
-<?php
-// Update personal data
-$person->Firstname = "John";
-$person->Age  = "20";
-$person->Sex = "F";
-$person->Id  = "4"; 
-// Returns affected rows
-$saved = $person->Save();
- 
-//  Or give the bindings to the constructor
-$person = new person(array("Firstname"=>"John","age"=>"20","sex"=>"F","Id"=>"4"));
-$saved = $person->Save();
- 
-// SQL Equivalent
-"UPDATE persons SET Firstname = 'John',Age = 20, Sex = 'F' WHERE Id= 4"
-```
-#### Finding a person
-```php
-<?php
-// Find person
-$person->Id = "1";
-$person->find();
-
-echo $person->Firstname;
-// Johny
- 
-// Shorthand method, give id as parameter
-$person->find(1); 
- 
-// SQL Equivalent
-"SELECT * FROM persons WHERE Id = 1"
-```
-#### Getting all the persons
-```php
-<?php
-// Finding all person
-$persons = $person->all(); 
- 
-// SQL Equivalent
-"SELECT * FROM persons 
-```
-
-## Copyright and license
-#### Code released under Beerware
 
