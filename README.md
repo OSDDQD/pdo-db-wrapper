@@ -11,7 +11,7 @@ php composer.phar require slowpoked/pdo-db-wrapper
 #### 2. Require the class in your project
 ```php
 <?php
-use \Slowpoked\Db;
+use Slowpoked\Db;
 ```
 #### 3. Create the instance 
 ```php
